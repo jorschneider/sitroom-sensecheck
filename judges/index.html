@@ -2,12 +2,14 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap">
 <style>
 :root{
-  --paper:#F4EEDF; --paper-2:#EDE4CF; --card:#FBF7EC; --ink:#22303A; --ink-2:#4F5B63; --ink-3:#7E8890; --rule:#D8CDB3; --rule-2:#BFB08F;
-  --rust:#B5472A; --rust-soft:#F5DED5; --teal:#2C6E7A; --teal-soft:#D8E8EA; --olive:#6E7F3E; --olive-soft:#E3E8D2; --mustard:#C99A2E; --mustard-soft:#F6EBCF;
+  --paper:#EFE6D0; --paper-2:#E5DABE; --card:#F8F2E2; --ink:#1E1F22; --ink-2:#4A4D52; --ink-3:#7A7C80; --rule:#CFC3A3; --rule-2:#A89B78;
+  --rust:#C8442B; --rust-soft:#F3D9CF; --teal:#1F6F7E; --teal-soft:#CFE3E6; --olive:#6B7A2E; --olive-soft:#E0E5C4; --mustard:#D9A21B; --mustard-soft:#F6E7BB; --coral:#E86A4A; --black:#1E1F22;
 }
 *{box-sizing:border-box}
 html{color-scheme:light}
-body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 "Source Serif 4",Georgia,serif}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 "Source Serif 4",Georgia,serif;position:relative}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.35;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.3 0 0 0 0 0.2 0 0 0 .12 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>")}
+header,main,#landing,.progress,footer,.classify{position:relative;z-index:1}
 a{color:var(--teal)}
 h1,h2,h3{font-family:"Jost",Futura,"Trebuchet MS",sans-serif;margin:0;text-wrap:balance}
 button{font:inherit;color:inherit;cursor:pointer}
@@ -15,58 +17,75 @@ button{font:inherit;color:inherit;cursor:pointer}
 .eyebrow{font-family:"Courier Prime",Courier,monospace;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
 .wrap{max-width:1040px;margin:0 auto;padding:0 24px}
 
-/* masthead: report cover */
-header{background:var(--paper);border-bottom:3px double var(--rule-2)}
-.masthead{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;padding:28px 0 18px}
-.masthead h1{font-size:40px;line-height:1;font-weight:600;letter-spacing:-.01em;text-transform:uppercase}
-.masthead h1 span{display:block;font-size:16px;font-weight:500;letter-spacing:.18em;color:var(--rust);margin-bottom:8px}
-.masthead .sub{margin-top:10px;max-width:56ch;color:var(--ink-2);font-size:16px}
-.stamp{font-family:"Courier Prime",Courier,monospace;border:2px solid var(--rust);color:var(--rust);border-radius:6px;padding:8px 12px;font-size:12.5px;line-height:1.35;text-transform:uppercase;letter-spacing:.06em;transform:rotate(-2deg);background:rgba(255,255,255,.35)}
-.who{display:flex;align-items:center;gap:10px;margin-top:10px;justify-content:flex-end}
-.who select{font:inherit;font-family:"Jost",sans-serif;font-weight:500;padding:8px 12px;border:1.5px solid var(--ink);border-radius:4px;background:var(--card);color:var(--ink)}
-nav.tabs{display:flex;gap:0;border-top:1px solid var(--rule-2)}
-nav.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:10px 16px 8px;color:var(--ink-2);font-family:"Jost",sans-serif;font-weight:500;letter-spacing:.04em;text-transform:uppercase;font-size:13.5px}
-nav.tabs button[aria-selected="true"]{color:var(--rust);border-bottom-color:var(--rust)}
+/* classification strip */
+.classify{background:var(--rust);color:#fff;font-family:"Courier Prime",monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;text-align:center;padding:4px 0;white-space:nowrap;overflow:hidden}
+.classify.bottom{margin-top:0}
+/* report cover */
+header{background:var(--paper);border-bottom:4px solid var(--black);box-shadow:inset 0 -8px 0 var(--paper),inset 0 -9px 0 var(--black)}
+.cover{display:grid;grid-template-columns:150px 1fr 220px;gap:28px;padding:30px 0 22px;align-items:stretch}
+@media (max-width:820px){.cover{grid-template-columns:1fr;gap:16px}.cover-art{display:none}.cover-meta{flex-direction:row;flex-wrap:wrap;gap:18px;border-right:0;border-bottom:2px solid var(--black);padding-bottom:10px}}
+.cover-meta{display:flex;flex-direction:column;gap:14px;border-right:2px solid var(--black);padding-right:18px;font-family:"Courier Prime",monospace;font-size:12.5px;line-height:1.35;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2)}
+.cover-meta b{color:var(--ink);font-weight:700}
+.cover-title h1{font-size:64px;line-height:.92;font-weight:700;letter-spacing:-.015em;text-transform:uppercase;color:var(--black)}
+.cover-title h1 span{display:block;font-size:15px;font-weight:600;letter-spacing:.34em;color:var(--rust);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--rust);width:max-content}
+.cover-title .sub{margin-top:14px;max-width:52ch;color:var(--ink-2);font-size:16px}
+.cover-art{position:relative;min-height:190px}
+.radar{position:absolute;inset:0;border-radius:2px;background:
+  radial-gradient(circle at 70% 60%, transparent 0 22px, var(--black) 22px 24px, transparent 24px 46px, var(--black) 46px 48px, transparent 48px 72px, var(--black) 72px 74px, transparent 74px 100px, var(--black) 100px 102px, transparent 102px),
+  conic-gradient(from 200deg at 70% 60%, rgba(217,162,27,.85) 0 38deg, transparent 38deg),
+  radial-gradient(circle at 70% 60%, var(--rust) 0 6px, transparent 6px),
+  repeating-linear-gradient(90deg, rgba(30,31,34,.18) 0 1px, transparent 1px 14px),
+  repeating-linear-gradient(0deg, rgba(30,31,34,.18) 0 1px, transparent 1px 14px),
+  var(--teal-soft);
+  border:2px solid var(--black)}
+.stamp{position:absolute;right:-10px;bottom:-12px;font-family:"Courier Prime",monospace;font-weight:700;border:3px double var(--rust);color:var(--rust);border-radius:4px;padding:8px 12px;font-size:12.5px;line-height:1.3;text-transform:uppercase;letter-spacing:.08em;transform:rotate(-6deg);background:rgba(248,242,226,.9);mix-blend-mode:multiply;opacity:.92}
+nav.tabs{display:flex;gap:0;border-top:2px solid var(--black)}
+nav.tabs button{background:none;border:0;border-right:2px solid var(--black);padding:11px 18px 9px;color:var(--ink);font-family:"Jost",sans-serif;font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:13px}
+nav.tabs button i{font-style:normal;font-family:"Courier Prime",monospace;font-weight:400;color:var(--ink-3);margin-right:8px}
+nav.tabs button[aria-selected="true"]{background:var(--black);color:var(--paper)}
+nav.tabs button[aria-selected="true"] i{color:var(--mustard)}
 button:focus-visible,select:focus-visible,textarea:focus-visible,input:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 main{padding:22px 0 90px}
 .view{display:none}.view.on{display:block}
 
 .progress{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--rule);padding:8px 0}
 .progress .row{display:flex;justify-content:space-between;align-items:baseline;font-family:"Courier Prime",monospace;font-size:13px;color:var(--ink-2)}
-.progress .bar{height:6px;background:var(--paper-2);border:1px solid var(--rule);border-radius:3px;margin-top:6px;overflow:hidden}
-.progress .bar i{display:block;height:100%;background:var(--teal);width:0;transition:width .2s}
+.progress .bar{height:10px;background:repeating-linear-gradient(90deg,var(--black) 0 1px,transparent 1px 10%);background-size:100% 100%;border-bottom:2px solid var(--black);margin-top:6px;position:relative}
+.progress .bar i{position:absolute;left:0;top:2px;height:6px;background:var(--rust);width:0;transition:width .2s}
 
-.brief{background:var(--card);border:1px solid var(--rule-2);border-radius:4px;padding:22px 26px;margin:14px 0 22px;max-width:78ch;position:relative}
-.brief:before{content:"MEMORANDUM";position:absolute;top:-10px;left:18px;background:var(--card);padding:0 8px;font-family:"Courier Prime",monospace;font-size:12px;letter-spacing:.14em;color:var(--rust)}
-.brief h2{font-size:24px;font-weight:600;margin-bottom:10px}
-.brief p{margin:0 0 12px;color:var(--ink-2)}
+.brief{background:var(--card);border:2px solid var(--black);box-shadow:5px 5px 0 var(--black);padding:22px 26px 20px;margin:18px 0 26px;max-width:78ch;position:relative}
+.brief:before{content:"MEMORANDUM";position:absolute;top:-12px;left:18px;background:var(--mustard);color:var(--black);padding:1px 10px;font-family:"Courier Prime",monospace;font-weight:700;font-size:12px;letter-spacing:.16em;border:2px solid var(--black)}
+.brief h2{font-size:26px;font-weight:700;margin-bottom:10px;text-transform:uppercase;letter-spacing:.02em}
+.brief p{margin:0 0 12px;color:var(--ink-2);font-family:"Courier Prime",monospace;font-size:14.5px;line-height:1.55}
 .brief p:last-child{margin:0}
 .brief b{color:var(--ink);font-weight:600}
-.legend{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:12px 0 0;font-size:15px}
-.legend .k{font-family:"Jost",sans-serif;font-weight:600;white-space:nowrap}
+.legend{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;margin:12px 0 0;font-size:14.5px;font-family:"Courier Prime",monospace}
+.legend .k{font-family:"Jost",sans-serif;font-weight:700;white-space:nowrap;text-transform:uppercase;letter-spacing:.04em;font-size:13px;padding-top:2px}
 .legend .k.c1{color:var(--olive)}.legend .k.c2{color:var(--mustard)}.legend .k.c3{color:var(--rust)}
 
 .toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
-.chip{border:1.5px solid var(--rule-2);background:var(--card);border-radius:999px;padding:5px 14px;font-family:"Jost",sans-serif;font-size:13.5px;font-weight:500;color:var(--ink-2)}
-.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.chip{border:2px solid var(--black);background:var(--card);border-radius:0;padding:4px 12px;font-family:"Jost",sans-serif;font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--black);color:var(--paper)}
 
 .list{display:flex;flex-direction:column;gap:18px}
-.card{background:var(--card);border:1px solid var(--rule-2);border-radius:4px;box-shadow:0 1px 0 var(--rule-2),0 10px 24px -18px rgba(34,48,58,.35)}
-.card .head{display:grid;grid-template-columns:auto 1fr;gap:16px;padding:18px 22px 14px;border-bottom:1px solid var(--rule)}
-.card .num{font-family:"Courier Prime",monospace;font-size:13px;color:var(--rust);border:1.5px solid var(--rust);border-radius:3px;padding:2px 7px;height:fit-content;margin-top:5px;white-space:nowrap}
-.card h3{font-size:24px;font-weight:600;line-height:1.15}
+.card{background:var(--card);border:2px solid var(--black);box-shadow:6px 6px 0 var(--black);border-radius:0}
+.card .head{display:grid;grid-template-columns:auto 1fr;gap:16px;padding:18px 22px 14px;border-bottom:2px solid var(--black);background:linear-gradient(var(--card),var(--card)) padding-box}
+.card .num{font-family:"Jost",sans-serif;font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--paper);background:var(--black);padding:6px 9px;height:fit-content;margin-top:3px;white-space:nowrap}
+.card h3{font-size:26px;font-weight:700;line-height:1.1;text-transform:uppercase;letter-spacing:.01em}
 .card .by{font-family:"Jost",sans-serif;font-weight:500;color:var(--ink-2);margin-top:4px;font-size:15px}
 .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.tag{font-family:"Courier Prime",monospace;font-size:12px;letter-spacing:.04em;text-transform:uppercase;border-radius:3px;padding:2px 8px;background:var(--paper-2);color:var(--ink-2);border:1px solid var(--rule)}
-.tag.stage{background:var(--teal-soft);color:var(--teal);border-color:transparent}
-.tag.bg{background:var(--olive-soft);color:var(--olive);border-color:transparent}
-.tag.j{background:var(--rust-soft);color:var(--rust);border-color:transparent}
-.tag.lo{border-style:dashed}
+.tag{font-family:"Courier Prime",monospace;font-size:12px;letter-spacing:.04em;text-transform:uppercase;border-radius:0;padding:2px 8px;background:var(--card);color:var(--ink-2);border:1.5px solid var(--black)}
+.tag.stage{background:var(--teal);color:#fff;border-color:var(--teal)}
+.tag.bg{background:var(--olive);color:#fff;border-color:var(--olive)}
+.tag.j{background:var(--rust);color:#fff;border-color:var(--rust)}
+.tag.lo{border-style:dashed;background:transparent;color:var(--ink-2);border-color:var(--ink-2)}
 .body{display:grid;grid-template-columns:3fr 2fr;gap:0}
 .body>div{padding:16px 22px}
-.body .left{border-right:1px solid var(--rule)}
+.body .left{border-right:2px solid var(--black)}
 @media (max-width:760px){.body{grid-template-columns:1fr}.body .left{border-right:0;border-bottom:1px solid var(--rule)}}
-.sec{font-family:"Courier Prime",monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--rust);margin:0 0 6px}
+.sec{font-family:"Jost",sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--black);margin:0 0 8px;display:flex;align-items:center;gap:10px}
+.sec i{font-style:normal;font-family:"Courier Prime",monospace;font-weight:400;color:var(--rust)}
+.sec:after{content:"";flex:1;height:2px;background:var(--black);opacity:.85}
 .sec+.sec{margin-top:14px}
 .body p{margin:0 0 12px;font-size:15.5px;color:var(--ink)}
 .body p.dim{color:var(--ink-2)}
@@ -82,108 +101,122 @@ details.read p{font-size:14px;color:var(--ink-2);margin:8px 0 0}
 .person .role{font-family:"Jost",sans-serif;font-weight:500;color:var(--ink);font-size:15px;margin-bottom:6px}
 .person .conf{font-family:"Courier Prime",monospace;font-size:12px;color:var(--ink-3);margin-top:8px}
 
-.verdict{padding:16px 22px 20px;border-top:1px solid var(--rule);background:var(--paper)}
+.verdict{padding:16px 22px 20px;border-top:2px solid var(--black);background:var(--paper-2)}
 .cats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 @media (max-width:760px){.cats{grid-template-columns:1fr}}
-.cats button{text-align:left;border:1.5px solid var(--rule-2);background:var(--card);border-radius:4px;padding:10px 12px;line-height:1.35}
-.cats button b{display:block;font-family:"Jost",sans-serif;font-weight:600;font-size:15px}
-.cats button small{display:block;color:var(--ink-2);font-size:13px;margin-top:2px}
-.cats button.c1[aria-pressed="true"]{background:var(--olive);border-color:var(--olive);color:#fff}
-.cats button.c2[aria-pressed="true"]{background:var(--mustard);border-color:var(--mustard);color:#fff}
-.cats button.c3[aria-pressed="true"]{background:var(--rust);border-color:var(--rust);color:#fff}
-.cats button[aria-pressed="true"] small{color:rgba(255,255,255,.85)}
+.cats button{text-align:left;border:2px solid var(--black);background:var(--card);border-radius:0;padding:10px 12px;line-height:1.35;box-shadow:3px 3px 0 var(--black);transition:transform .08s,box-shadow .08s}
+.cats button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--black)}
+.cats button b{display:block;font-family:"Jost",sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.05em}
+.cats button small{display:block;color:var(--ink-2);font-size:13px;margin-top:3px;font-family:"Courier Prime",monospace}
+.cats button.c1[aria-pressed="true"]{background:var(--olive);color:#fff}
+.cats button.c2[aria-pressed="true"]{background:var(--mustard);color:var(--black)}
+.cats button.c3[aria-pressed="true"]{background:var(--rust);color:#fff}
+.cats button.c1[aria-pressed="true"] small,.cats button.c3[aria-pressed="true"] small{color:rgba(255,255,255,.88)}
+.cats button.c2[aria-pressed="true"] small{color:rgba(30,31,34,.75)}
 .share{display:none;margin-top:10px;font-size:14.5px;align-items:center;gap:8px;font-family:"Jost",sans-serif}
 .share.on{display:flex}
 .share input{width:16px;height:16px;accent-color:var(--teal)}
 .fb{display:grid;gap:10px;margin-top:6px}
-.fb .q{font-family:"Jost",sans-serif;font-weight:500;font-size:14.5px;color:var(--ink);margin:0 0 3px}
+.fb .q{font-family:"Jost",sans-serif;font-weight:600;font-size:14.5px;color:var(--ink);margin:0 0 3px}
 .fb .q small{font-family:"Source Serif 4",serif;font-weight:400;color:var(--ink-3);font-size:13.5px}
 .fb textarea{min-height:54px}
 .fbnote{font-size:13.5px;color:var(--ink-3);margin-top:6px;font-style:italic}
 .sync{font-family:"Courier Prime",monospace;font-size:12px;color:var(--ink-3)}
 .sync.err{color:var(--rust)}
-label.lbl{display:block;font-family:"Courier Prime",monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin:14px 0 5px}
-textarea{width:100%;font:inherit;font-size:15px;padding:10px 12px;border:1.5px solid var(--rule-2);border-radius:4px;background:var(--card);color:var(--ink);resize:vertical;min-height:70px;line-height:1.5}
+label.lbl{display:block;font-family:"Jost",sans-serif;font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--black);margin:16px 0 6px}
+textarea{width:100%;font-family:"Courier Prime",monospace;font-size:14.5px;padding:10px 12px;border:2px solid var(--black);border-radius:0;background:var(--card);color:var(--ink);resize:vertical;min-height:70px;line-height:1.55;background-image:repeating-linear-gradient(transparent 0 22px, rgba(30,31,34,.07) 22px 23px);background-attachment:local}
 textarea::placeholder{color:var(--ink-3)}
 
-.export{background:var(--card);border:1px solid var(--rule-2);border-radius:4px;padding:18px 22px;margin-top:26px}
-.export h2{font-size:22px;font-weight:600;margin-bottom:6px}
+.export{background:var(--card);border:2px solid var(--black);box-shadow:5px 5px 0 var(--black);border-radius:0;padding:18px 22px;margin-top:30px}
+.export h2{font-size:22px;font-weight:700;margin-bottom:6px;text-transform:uppercase;letter-spacing:.02em}
 .export p{margin:0 0 12px;color:var(--ink-2);max-width:70ch}
 .export .row{display:flex;gap:8px;flex-wrap:wrap}
-.export button,.export a.btn{border:1.5px solid var(--ink);background:var(--card);border-radius:4px;padding:8px 14px;font-family:"Jost",sans-serif;font-weight:500;font-size:14.5px;text-decoration:none;color:var(--ink);cursor:pointer}
+.export button,.export a.btn{border:2px solid var(--black);background:var(--card);border-radius:0;box-shadow:3px 3px 0 var(--black);padding:8px 14px;font-family:"Jost",sans-serif;font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:var(--ink);cursor:pointer}
 .export .primary{background:var(--rust);border-color:var(--rust);color:#fff}
-.locked{background:var(--card);border:1px dashed var(--rule-2);border-radius:4px;padding:28px;text-align:center;color:var(--ink-2)}
+.locked{background:var(--card);border:2px dashed var(--black);border-radius:0;padding:28px;text-align:center;color:var(--ink-2);font-family:"Courier Prime",monospace}
 .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:8px 14px;border-radius:4px;font-family:"Courier Prime",monospace;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.on{opacity:1}
 .rank{font-family:"Jost",sans-serif;font-size:26px;font-weight:600;color:var(--rust);margin-top:2px}
 .notes{display:flex;flex-direction:column;gap:8px;margin-top:8px}
-.notes .n{border-left:3px solid var(--teal);padding:6px 12px;background:var(--paper);font-size:14.5px}
+.notes .n{border-left:4px solid var(--teal);padding:8px 12px;background:var(--card);font-size:14px;font-family:"Courier Prime",monospace}
 .notes .n b{font-family:"Jost",sans-serif}
 .decide{display:flex;gap:6px;margin-top:10px}
-.decide button{border:1.5px solid var(--rule-2);background:var(--card);border-radius:4px;padding:6px 12px;font-family:"Jost",sans-serif;font-size:14px}
+.decide button{border:2px solid var(--black);background:var(--card);border-radius:0;box-shadow:2px 2px 0 var(--black);padding:6px 12px;font-family:"Jost",sans-serif;font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.04em}
 
 /* results */
-.rtable{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--rule-2);font-size:14px}
-.rtable th{font-family:"Courier Prime",monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);text-align:left;padding:8px 10px;border-bottom:1px solid var(--rule-2);background:var(--paper-2)}
+.rtable{width:100%;border-collapse:collapse;background:var(--card);border:2px solid var(--black);font-size:14px}
+.rtable th{font-family:"Jost",sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--paper);text-align:left;padding:8px 10px;border-bottom:2px solid var(--black);background:var(--black)}
 .rtable td{padding:8px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
 .rtable td.n{font-family:"Courier Prime",monospace;text-align:right}
 .tblwrap{overflow-x:auto;margin-bottom:22px}
 .pill{font-family:"Jost",sans-serif;font-size:12px;font-weight:600;border-radius:3px;padding:1px 7px;white-space:nowrap}
 .pill.c1{background:var(--olive-soft);color:var(--olive)}.pill.c2{background:var(--mustard-soft);color:#8a6a1a}.pill.c3{background:var(--rust-soft);color:var(--rust)}.pill.c0{background:var(--paper-2);color:var(--ink-3)}
-.fin{border:1.5px solid var(--rule-2);border-radius:4px;padding:3px 10px;font-family:"Jost",sans-serif;font-size:13px;background:var(--card)}
+.fin{border:2px solid var(--black);border-radius:0;padding:3px 10px;font-family:"Jost",sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.05em;background:var(--card);box-shadow:2px 2px 0 var(--black)}
 .fin[aria-pressed="true"]{background:var(--rust);border-color:var(--rust);color:#fff}
 .fbq{font-size:13.5px;color:var(--ink-2);margin:2px 0 0}
 .fbq b{font-family:"Jost",sans-serif;color:var(--ink)}
 .strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:14px 0 18px}
-.tile{background:var(--card);border:1px solid var(--rule-2);border-radius:4px;padding:10px 14px}
-.tile .n{font-family:"Jost",sans-serif;font-size:28px;font-weight:600;line-height:1.1}
+.tile{background:var(--card);border:2px solid var(--black);border-radius:0;padding:10px 14px;box-shadow:3px 3px 0 var(--black)}
+.tile .n{font-family:"Jost",sans-serif;font-size:30px;font-weight:700;line-height:1.1}
 .tile .l{font-family:"Courier Prime",monospace;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
-/* landing */
-#landing{padding:40px 0 80px}
-.pick{max-width:760px;margin:0 auto;text-align:center}
-.pick h2{font-size:30px;font-weight:600;margin:6px 0 10px}
-.pick p{color:var(--ink-2);max-width:56ch;margin:0 auto 26px}
-.names{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-@media (max-width:640px){.names{grid-template-columns:1fr}}
-.names button{background:var(--card);border:1.5px solid var(--rule-2);border-radius:4px;padding:26px 16px 20px;font-family:"Jost",sans-serif;text-align:center;transition:transform .12s,border-color .12s}
-.names button:hover{border-color:var(--rust);transform:translateY(-2px)}
-.names button b{display:block;font-size:24px;font-weight:600}
-.names button small{display:block;font-family:"Courier Prime",monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-top:6px}
-.names button .cnt{display:inline-block;margin-top:12px;font-family:"Courier Prime",monospace;font-size:12.5px;color:var(--rust);border:1.5px solid var(--rust);border-radius:3px;padding:2px 8px}
-.pick .jordan{margin-top:22px;background:none;border:0;color:var(--ink-3);font-family:"Courier Prime",monospace;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;text-decoration:underline dotted}
-.signed{display:flex;align-items:center;gap:10px;justify-content:flex-end;margin-top:10px;font-family:"Jost",sans-serif;font-weight:500}
+/* landing: routing slip */
+#landing{padding:44px 0 90px}
+.pick{max-width:640px;margin:0 auto}
+.slip{background:var(--card);border:2px solid var(--black);box-shadow:8px 8px 0 var(--black);padding:0 0 22px}
+.slip-head{display:flex;justify-content:space-between;background:var(--black);color:var(--paper);font-family:"Jost",sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;padding:8px 18px}
+.slip h2{font-size:30px;font-weight:700;margin:18px 22px 6px;text-transform:uppercase;letter-spacing:.01em}
+.slip p{color:var(--ink-2);margin:0 22px 18px;font-family:"Courier Prime",monospace;font-size:14px}
+.names{display:flex;flex-direction:column;margin:0 22px;border-top:2px solid var(--black)}
+.names button{display:flex;align-items:center;gap:14px;background:none;border:0;border-bottom:2px solid var(--black);padding:14px 6px;text-align:left;font-family:"Jost",sans-serif;transition:background .1s}
+.names button:hover{background:var(--mustard-soft)}
+.names button .box{font-family:"Courier Prime",monospace;font-size:22px;line-height:1;color:var(--black)}
+.names button .nm b{display:block;font-size:22px;font-weight:700;text-transform:uppercase;letter-spacing:.02em}
+.names button .nm small{display:block;font-family:"Courier Prime",monospace;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);margin-top:2px}
+.names button .cnt{margin-left:auto;font-family:"Jost",sans-serif;font-size:22px;color:var(--rust)}
+.pick .jordan{display:block;margin:14px 22px 0;background:none;border:0;color:var(--ink-3);font-family:"Courier Prime",monospace;font-size:13px;letter-spacing:.04em;text-transform:uppercase;padding:0;text-align:left}
+.pick .jordan:hover{color:var(--rust)}
+.signed{display:flex;align-items:center;gap:10px;margin-top:14px;font-family:"Courier Prime",monospace;font-size:13px;text-transform:uppercase;letter-spacing:.06em}
+.signed b{background:var(--mustard);padding:1px 6px}
 .signed button{background:none;border:0;color:var(--ink-3);font-family:"Courier Prime",monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;text-decoration:underline dotted;padding:0}
-body.landing nav.tabs,body.landing .progress,body.landing main.app{display:none}
+.colophon{padding:0 0 26px}
+.colophon .rule{height:2px;background:var(--black);margin:30px 0 12px;box-shadow:0 5px 0 var(--black)}
+.colophon p{font-family:"Courier Prime",monospace;font-size:12px;color:var(--ink-3);max-width:80ch;margin:14px 0 0;letter-spacing:.02em}
+body.landing nav.tabs,body.landing .progress,body.landing main.app,body.landing .colophon{display:none}
 body:not(.landing) #landing{display:none}
 @media (prefers-reduced-motion:reduce){.toast,.progress .bar i,.names button{transition:none}}
 </style></head><body>
 
 <header>
   <div class="wrap">
-    <div class="masthead">
-      <div>
-        <h1><span>ChinaTalk · Contest No. 2 · 2026</span>Evals for the Situation Room</h1>
-        <div class="sub">Judging portal. Round 1: sort your assigned entries and write the entrants a few lines. Final round: the three of you look at the best together.</div>
+    <div class="cover">
+      <div class="cover-meta">
+        <div class="rep">Memorandum<br><b>RM-2026-CT</b></div>
+        <div class="rep">September 2026</div>
+        <div class="rep">Prepared for<br><b>The ChinaTalk<br>Evaluation Board</b></div>
       </div>
-      <div>
-        <div class="stamp">For judges' eyes<br>Not for circulation</div>
+      <div class="cover-title">
+        <h1><span>Evals for the</span>Situation<br>Room</h1>
+        <div class="sub">A judging portal. Round 1: sort your assigned entries and write the entrants a few lines. Final round: the three of you look at the best together.</div>
         <div class="signed" id="signed"></div>
       </div>
+      <div class="cover-art" aria-hidden="true"><div class="radar"></div></div>
     </div>
     <nav class="tabs" role="tablist">
-      <button role="tab" data-v="r1" aria-selected="true">Round 1 · Sort</button>
-      <button role="tab" data-v="final">Final Round · Rank</button>
-      <button role="tab" data-v="results" id="tabResults" hidden>Results · Jordan</button>
+      <button role="tab" data-v="r1" aria-selected="true"><i>1.0</i> Round One · Sort</button>
+      <button role="tab" data-v="final"><i>2.0</i> Final Round · Rank</button>
+      <button role="tab" data-v="results" id="tabResults" hidden><i>3.0</i> Results · Jordan</button>
     </nav>
   </div>
 </header>
 
 <section id="landing"><div class="wrap"><div class="pick">
-  <div class="eyebrow">Welcome, judge</div>
-  <h2>Who's reading today?</h2>
-  <p>Pick your name and we'll show you your share of the entries. Everything saves as you go, so come back any time, from any device.</p>
-  <div class="names" id="names"></div>
-  <button class="jordan" data-name="Jordan">Jordan (see everything)</button>
+  <div class="slip">
+    <div class="slip-head"><span>Routing slip</span><span>Form CT-27</span></div>
+    <h2>Who's reading today?</h2>
+    <p>Check your name and we'll route you your share of the entries. Everything saves as you go — come back any time, from any device.</p>
+    <div class="names" id="names"></div>
+    <button class="jordan" data-name="Jordan">☐ &nbsp;J. Schneider — board chair (sees everything)</button>
+  </div>
 </div></div></section>
 
 <div class="progress"><div class="wrap"><div class="row"><span id="progText">—</span><span id="progRight"></span></div><div class="bar"><i id="progBar"></i></div></div></div>
@@ -209,16 +242,15 @@ body:not(.landing) #landing{display:none}
       <button class="chip" data-f="3">Pass</button>
     </div>
     <div class="list" id="list"></div>
-    <section class="export" id="export">
-      <h2>That's it.</h2>
-      <p id="exportText">Everything you've entered is already saved as you go — nothing to submit. If you'd like a copy for yourself, grab it here.</p>
-      <div class="row"><button id="copyBtn">Copy my results</button><a class="btn" id="mailBtn" href="#">Email a copy to Jordan</a></div>
-    </section>
   </section>
 
   <section class="view" id="v-final"><div id="finalArea"></div></section>
   <section class="view" id="v-results"><div id="resultsArea"></div></section>
 </main>
+<footer class="colophon"><div class="wrap">
+  <div class="rule"></div>
+  <p>Reproduction in whole or in part is permitted for any purpose of the ChinaTalk Evaluation Board. Views expressed by entrants are their own. Set in Jost, Source Serif and Courier Prime; assembled September 2026.</p>
+</div></footer>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -259,7 +291,7 @@ load(); try{ _me=localStorage.getItem('sitroom-judge')||''; }catch(e){}
 const me=()=>_me;
 function setMe(n){ _me=n; try{localStorage.setItem('sitroom-judge',n)}catch(e){} renderAll(); window.scrollTo(0,0); pull(); }
 const JUDGES={Florian:'Assigned entries',Kevin:'Assigned entries',Neeraj:'Assigned entries'};
-document.getElementById('names').innerHTML=Object.keys(JUDGES).map(n=>{const k=SUBS.filter(s=>s.judge===n).length;return `<button data-name="${n}"><b>${n}</b><small>Judge</small><span class="cnt">${k} entries</span></button>`;}).join('');
+document.getElementById('names').innerHTML=Object.keys(JUDGES).map((n,i)=>{const k=SUBS.filter(s=>s.judge===n).length;return `<button data-name="${n}"><span class="box">☐</span><span class="nm"><b>${n}</b><small>Reader ${i+1} · ${k} entries assigned</small></span><span class="cnt">→</span></button>`;}).join('');
 document.querySelectorAll('#landing [data-name]').forEach(b=>b.onclick=()=>setMe(b.dataset.name));
 function renderSigned(){ const el=document.getElementById('signed'); document.body.classList.toggle('landing',!_me);
   el.innerHTML=_me?`<span>Reading as <b>${esc(_me)}</b></span><button id="switch">Not you?</button>`:''; const sw=document.getElementById('switch'); if(sw)sw.onclick=()=>setMe(''); }
@@ -281,14 +313,14 @@ function dossier(s,showJudge){
     </div></div>
     <div class="body">
       <div class="left">
-        <div class="sec">The entry</div>
+        <div class="sec"><i>1.1</i> The entry</div>
         <p class="gist">${esc(s.one)}</p>
         <p>${esc(s.abstract)||'<i>No abstract submitted.</i>'}</p>
         ${linkRow(s)}
         <details class="read"><summary>Claude's first-pass read (optional)</summary><p><b>Strengths.</b> ${esc(s.strengths)}</p><p><b>Concerns.</b> ${esc(s.concerns)}</p><p><b>Models run:</b> ${esc(s.models.join(', ')||'none')}</p></details>
       </div>
       <div class="person">
-        <div class="sec">The person</div>
+        <div class="sec"><i>1.2</i> The person</div>
         <div class="role">${esc(s.role)}</div>
         <p class="dim">${esc(s.bio)||'<i>No bio submitted.</i>'}</p>
         <div class="conf">Stage/background from bio + web lookup · confidence ${esc(s.conf)}${s.conf==='low'?' (dashed tags = unverified)':''}</div>
@@ -309,7 +341,7 @@ function renderR1(){
   el.innerHTML=list.map(s=>{const r=v(s.id);
     return `<article class="card" data-id="${s.id}">${dossier(s,j==='Jordan')}
       <div class="verdict">
-        <div class="sec">Your call</div>
+        <div class="sec"><i>1.3</i> Your call</div>
         <div class="cats">${[1,2,3].map(n=>`<button class="c${n}" data-c="${n}" aria-pressed="${r.cat===n}"><b>${CATS[n][0]}</b><small>${CATS[n][1]}</small></button>`).join('')}</div>
         <label class="share ${r.cat===2?'on':''}"><input type="checkbox" data-share ${r.share?'checked':''}> Also send this one to the other judges for a look</label>
         <label class="lbl">Feedback for the entrant — they'll read this</label>
@@ -319,8 +351,8 @@ function renderR1(){
           <div><div class="q">What to build next <small>— if they had another month</small></div><textarea data-f="next" placeholder="e.g. Drop the scoring rubric and let the outcome be mechanically determined.">${esc(r.next||'')}</textarea></div>
         </div>
         <div class="fbnote">Your feedback goes to the entrant with their result (and, for Encourage picks, with the honorarium and Signal invite). A couple of sentences per box is plenty; skip any that don't apply.</div>
-        <label class="lbl">Private note to Jordan (optional)</label>
-        <textarea data-note style="min-height:44px" placeholder="Anything you wouldn't say to the entrant.">${esc(r.note||'')}</textarea>
+        <label class="lbl">Private note to the other judges (optional — won't go to the submitter)</label>
+        <textarea data-note style="min-height:44px" placeholder="Anything you'd say to the board but not to the entrant.">${esc(r.note||'')}</textarea>
       </div></article>`;}).join('') || '<div class="locked">Nothing here.</div>';
   el.querySelectorAll('.card').forEach(card=>{ const id=+card.dataset.id;
     const put=p=>{ const row={...(state.r1[key(id)]||{}),judge:j,sub:id,...p}; state.r1[key(id)]=row; push({round:'r1',judge:j,sub:id,cat:row.cat||'',share:!!row.share,works:row.works||'',improve:row.improve||'',next:row.next||'',note:row.note||''}); };
@@ -335,7 +367,7 @@ function renderR1(){
 function renderFinal(){
   const el=document.getElementById('finalArea'), j=me();
   if(!j){ return; }
-  const FIN=(state.finalists||[]).map(id=>({id,notes:Object.values(state.r1).filter(x=>x.sub===id&&x.cat).map(x=>({judge:x.judge,cat:x.cat,works:x.works,improve:x.improve,next:x.next}))}));
+  const FIN=(state.finalists||[]).map(id=>({id,notes:Object.values(state.r1).filter(x=>x.sub===id&&x.cat).map(x=>({judge:x.judge,cat:x.cat,works:x.works,improve:x.improve,next:x.next,note:x.note}))}));
   if(!FIN.length){ el.innerHTML='<div class="brief"><h2>Final round opens after Round 1.</h2><p>Once all three of you have finished sorting, Jordan sets the final slate here — the entries anyone flagged as Top-5 potential, plus any Encourage picks a judge asked to share — together with each judge\'s Round 1 feedback. You\'ll rank them and add a note, and we\'ll pick the top 5 from the combined rankings.</p></div>'; return; }
   const byId=Object.fromEntries(SUBS.map(s=>[s.id,s]));
   const r=state.fin[j]||{}; const ids=FIN.map(f=>f.id);
@@ -343,12 +375,12 @@ function renderFinal(){
   el.innerHTML=`<div class="brief"><h2>Final round.</h2><p>These are the entries at least one judge flagged. Read each other's notes, then <b>rank</b> them with the arrows (top = your winner) and add anything you want the group to hear. Top 5 comes from the combined rankings.</p></div>
   <div class="list">${order.map((id,i)=>{const s=byId[id], f=FIN.find(x=>x.id===id);
     return `<article class="card" data-id="${id}"><div style="padding:12px 22px 0"><div class="rank">#${i+1}</div></div>${dossier(s,false)}
-      <div class="verdict"><div class="sec">Round 1 notes from the judges</div>
-        <div class="notes">${(f.notes||[]).map(n=>`<div class="n"><b>${esc(n.judge)} · ${esc(CATS[n.cat]?CATS[n.cat][0]:'')}</b>${n.works?`<br><i>Works:</i> ${esc(n.works)}`:''}${n.improve?`<br><i>To make it real:</i> ${esc(n.improve)}`:''}${n.next?`<br><i>Next:</i> ${esc(n.next)}`:''}${!(n.works||n.improve||n.next)?'<br>—':''}</div>`).join('')}</div>
+      <div class="verdict"><div class="sec"><i>2.1</i> Round one notes from the board</div>
+        <div class="notes">${(f.notes||[]).map(n=>`<div class="n"><b>${esc(n.judge)} · ${esc(CATS[n.cat]?CATS[n.cat][0]:'')}</b>${n.works?`<br><i>Works:</i> ${esc(n.works)}`:''}${n.improve?`<br><i>To make it real:</i> ${esc(n.improve)}`:''}${n.next?`<br><i>Next:</i> ${esc(n.next)}`:''}${n.note?`<br><i>Judges only:</i> ${esc(n.note)}`:''}${!(n.works||n.improve||n.next||n.note)?'<br>—':''}</div>`).join('')}</div>
         <div class="decide"><button data-up>↑ Move up</button><button data-dn>↓ Move down</button></div>
         <label class="lbl">Your final-round note</label><textarea data-fn placeholder="Why it should (or shouldn't) be in the top 5.">${esc((r.notes||{})[id]||'')}</textarea>
       </div></article>`;}).join('')}</div>
-  <section class="export"><h2>That's it.</h2><p>Your ranking saves as you reorder. Copy is here if you want it.</p><div class="row"><button id="copyBtn2">Copy my ranking</button><a class="btn" id="mailBtn2" href="#">Email a copy</a></div></section>`;
+`;
   const put=p=>{ const row={...(state.fin[j]||{}),judge:j,order,...p}; state.fin[j]=row; push({round:'final',judge:j,sub:0,order:row.order,fin_note:row.notes||{}}); };
   el.querySelectorAll('.card').forEach((card,i)=>{ const id=+card.dataset.id;
     card.querySelector('[data-up]').onclick=()=>{ if(i>0){[order[i-1],order[i]]=[order[i],order[i-1]];put({});renderFinal();} };
@@ -356,8 +388,6 @@ function renderFinal(){
     let h; card.querySelector('[data-fn]').oninput=e=>{clearTimeout(h);h=setTimeout(()=>put({notes:{...(state.fin[j]?.notes||{}),[id]:e.target.value}}),600);};
   });
   const finSummary=()=>[`Final ranking from ${j} — ${new Date().toLocaleString()}`,'',...order.map((id,i)=>`${i+1}. #${id} ${byId[id].title||'Untitled'} — ${byId[id].name}${(state.fin[j]?.notes||{})[id]?`\n   ${(state.fin[j].notes)[id]}`:''}`)].join('\n');
-  document.getElementById('mailBtn2').onclick=e=>{e.preventDefault();location.href='mailto:jorschneider@gmail.com?subject='+encodeURIComponent('Situation Room evals — final ranking — '+j)+'&body='+encodeURIComponent(finSummary());};
-  document.getElementById('copyBtn2').onclick=async()=>{try{await navigator.clipboard.writeText(finSummary());toast('Copied');}catch(e){prompt('Copy this:',finSummary());}};
 }
 
 function summary(){ const j=me(); const lines=[`Round 1 from ${j} — ${new Date().toLocaleString()}`,''];
@@ -365,8 +395,6 @@ function summary(){ const j=me(); const lines=[`Round 1 from ${j} — ${new Date
     rows.forEach(s=>{const r=state.r1[key(s.id)]; lines.push(`  #${s.id} ${s.title||'Untitled'} — ${s.name}${c===2&&r.share?'  [share with other judges]':''}`); ['works','improve','next'].forEach(f=>{ if(r[f])lines.push(`     ${f.toUpperCase()}: ${r[f].replace(/\n/g,'\n     ')}`); }); if(r.note)lines.push(`     NOTE: ${r.note.replace(/\n/g,'\n     ')}`);}); lines.push(''); }
   const und=mine().filter(s=>!(state.r1[key(s.id)]||{}).cat); if(und.length)lines.push(`UNSORTED (${und.length}): ${und.map(s=>'#'+s.id).join(', ')}`);
   return lines.join('\n'); }
-document.getElementById('mailBtn').onclick=e=>{e.preventDefault();location.href='mailto:jorschneider@gmail.com?subject='+encodeURIComponent('Situation Room evals — round 1 — '+me())+'&body='+encodeURIComponent(summary());};
-document.getElementById('copyBtn').onclick=async()=>{try{await navigator.clipboard.writeText(summary());toast('Copied');}catch(e){prompt('Copy this:',summary());}};
 function renderResults(){
   const el=document.getElementById('resultsArea'); const tab=document.getElementById('tabResults');
   tab.hidden = me()!=='Jordan'; if(me()!=='Jordan'){ el.innerHTML=''; return; }
@@ -381,7 +409,7 @@ function renderResults(){
     <div class="tile"><div class="n">${rows.filter(x=>x.cat===3).length}</div><div class="l">Pass</div></div>
     <div class="tile"><div class="n">${fin.length}</div><div class="l">On final slate</div></div></div>
   <div class="brief" style="max-width:none"><h2>Round 1, live.</h2><p>Every entry with its judge's call and feedback. Toggle <b>Finalist</b> to build the final-round slate — judges see it the moment you do. Suggested: everything marked Top-5 potential plus any Encourage with the share box ticked (those are marked ★).</p>
-  <div class="tblwrap"><table class="rtable"><thead><tr><th>No.</th><th>Entry</th><th>Judge</th><th>Call</th><th>Feedback</th><th>Note to Jordan</th><th>Finalist</th></tr></thead><tbody>
+  <div class="tblwrap"><table class="rtable"><thead><tr><th>No.</th><th>Entry</th><th>Judge</th><th>Call</th><th>Feedback</th><th>Note to judges</th><th>Finalist</th></tr></thead><tbody>
   ${sorted.map(s=>{const r=catOf(s.judge,s.id); const c=r.cat||0;
     return `<tr><td class="n">${s.id}</td><td><b>${esc(s.title||'Untitled')}</b><br><span style="color:var(--ink-3);font-size:13px">${esc(s.name)} · ${esc(s.stage)} · ${esc(s.bg)}</span></td><td>${esc(s.judge)}</td>
       <td><span class="pill c${c}">${c?CATS[c][0]:'—'}</span>${c===2&&r.share?' ★':''}</td>
