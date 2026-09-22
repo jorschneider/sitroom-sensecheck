@@ -137,9 +137,6 @@ textarea::placeholder{color:var(--ink-3)}
 .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:8px 14px;border-radius:4px;font-family:"Courier Prime",monospace;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.on{opacity:1}
 .rank{font-family:"Jost",sans-serif;font-size:26px;font-weight:600;color:var(--rust);margin-top:2px}
-.notes{display:flex;flex-direction:column;gap:8px;margin-top:8px}
-.notes .n{border-left:4px solid var(--teal);padding:8px 12px;background:var(--card);font-size:14px;font-family:"Courier Prime",monospace}
-.notes .n b{font-family:"Jost",sans-serif}
 .decide{display:flex;gap:6px;margin-top:10px}
 .decide button{border:2px solid var(--black);background:var(--card);border-radius:0;box-shadow:2px 2px 0 var(--black);padding:6px 12px;font-family:"Jost",sans-serif;font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.04em}
 .decide{flex-wrap:wrap}
@@ -147,6 +144,7 @@ textarea::placeholder{color:var(--ink-3)}
 .final-choice{padding:12px 22px 16px;border-bottom:1px solid var(--rule)}
 .final-choice .rank{font-size:22px}
 .final-status{font-family:"Courier Prime",monospace;font-size:13px;margin-top:12px}
+.final-feedback{min-height:220px}
 
 /* results */
 .rtable{width:100%;border-collapse:collapse;background:var(--card);border:2px solid var(--black);font-size:14px}
@@ -391,25 +389,26 @@ function saveFinal(j,patch){
 function renderFinal(){
   const el=document.getElementById('finalArea'), j=me();
   if(!j){ return; }
-  const FIN=(state.finalists||[]).map(id=>({id,notes:Object.values(state.r1).filter(x=>x.sub===id&&x.cat).map(x=>({judge:x.judge,cat:x.cat,works:x.works,improve:x.improve,next:x.next,note:x.note}))}));
-  if(!FIN.length){ el.innerHTML='<div class="brief"><h2>Final round opens after Round 1.</h2><p>Once the board has finished sorting, Jordan sets the final slate here, together with each judge’s Round 1 feedback. You can rank the finalists or place them into S, A and B tiers, then add notes.</p></div>'; return; }
+  const ids=state.finalists||[];
+  if(!ids.length){ el.innerHTML='<div class="brief"><h2>Final round opens after Round 1.</h2><p>Once the board has finished sorting, Jordan sets the final slate here. You can rank the finalists or place them into S, A and B tiers, then write feedback for each submitter.</p></div>'; return; }
   const byId=Object.fromEntries(SUBS.map(s=>[s.id,s]));
-  const r=state.fin[j]||{}; const ids=FIN.map(f=>f.id), tierMode=r.mode==='tiers';
+  const r=state.fin[j]||{}, tierMode=r.mode==='tiers';
   const order=(r.order||[]).filter(id=>ids.includes(id)).concat(ids.filter(id=>!(r.order||[]).includes(id)));
   const display=tierMode?ids:order;
   const assigned=ids.filter(id=>Object.hasOwn(TIERS,(r.tiers||{})[id])).length;
-  el.innerHTML=`<div class="brief"><h2>Final round.</h2><p>Read the submissions and the board’s first-round notes, then choose how you want to evaluate the finalists. You can switch methods at any time; your work in both is kept, and only your selected method counts.</p>
+  el.innerHTML=`<div class="brief"><h2>Final round.</h2><p>Read the submissions, choose how you want to evaluate the finalists, and write feedback for each submitter. You can switch methods at any time; your work in both is kept, and only your selected method counts.</p>
     <div class="decide" role="group" aria-label="Evaluation method"><button data-mode="rank" aria-pressed="${!tierMode}">Rank finalists</button><button data-mode="tiers" aria-pressed="${tierMode}">Use tiers</button></div>
     <p style="margin-top:14px">${tierMode?'Place each finalist in a tier: <b>S — Exceptional</b>, <b>A — Strong</b>, <b>B — Promising</b>. Any number can share a tier; there is no order within a tier. Choices save automatically.':'Use the arrows to rank everyone, with your winner at the top. Changes save automatically. If the current order is right, click <b>Save this ranking</b>.'}</p>
     ${tierMode?'':'<div class="decide"><button data-save-rank>Save this ranking</button></div>'}
     <div class="final-status" role="status">${tierMode?`${assigned} of ${ids.length} finalists assigned${assigned===ids.length?' · All tiers assigned':''}`:finalComplete(r,ids)?'Ranking recorded for all finalists':'Current order has not been recorded for all finalists'}</div></div>
-  <div class="list">${display.map((id,i)=>{const s=byId[id], f=FIN.find(x=>x.id===id), tier=(r.tiers||{})[id];
+  <div class="list">${display.map((id,i)=>{const s=byId[id], tier=(r.tiers||{})[id];
     return `<article class="card" data-id="${id}"><div class="final-choice"><div class="rank">${tierMode?Object.hasOwn(TIERS,tier)?`${tier} tier`:'Unassigned':`#${i+1}`}</div>
       ${tierMode?`<div class="decide" role="group" aria-label="Tier for ${esc(s.title||'Untitled')}">${Object.keys(TIERS).map(t=>`<button data-tier="${t}" aria-pressed="${tier===t}">${t} tier</button>`).join('')}<button data-tier="" ${!tier?'disabled':''}>Clear tier</button></div>`:''}</div>${dossier(s,false)}
-      <div class="verdict"><div class="sec"><i>2.1</i> Round one notes from the board</div>
-        <div class="notes">${(f.notes||[]).map(n=>`<div class="n"><b>${esc(n.judge)} · ${esc(CATS[n.cat]?CATS[n.cat][0]:'')}</b>${n.works?`<br><i>Works:</i> ${esc(n.works)}`:''}${n.improve?`<br><i>To make it real:</i> ${esc(n.improve)}`:''}${n.next?`<br><i>Next:</i> ${esc(n.next)}`:''}${n.note?`<br><i>Judges only:</i> ${esc(n.note)}`:''}${!(n.works||n.improve||n.next||n.note)?'<br>—':''}</div>`).join('')}</div>
+      <div class="verdict">
         ${tierMode?'':`<div class="decide"><button data-up ${i===0?'disabled':''}>↑ Move up</button><button data-dn ${i===order.length-1?'disabled':''}>↓ Move down</button></div>`}
-        <label class="lbl" for="final-note-${id}">Your final-round note</label><textarea id="final-note-${id}" data-fn placeholder="Why it should (or shouldn't) be in the top 5.">${esc((r.notes||{})[id]||'')}</textarea>
+        <label class="lbl" for="final-note-${id}">Feedback for the submitter</label>
+        <p class="fbnote" id="final-feedback-help-${id}">Write directly to the person or team behind this submission. Share what works, what could be stronger, and what you would encourage them to build next.</p>
+        <textarea id="final-note-${id}" class="final-feedback" rows="8" aria-describedby="final-feedback-help-${id}" data-fn placeholder="What would you like the submitter to know?">${esc((r.notes||{})[id]||'')}</textarea>
       </div></article>`;}).join('')}</div>`;
   el.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{saveFinal(j,{mode:b.dataset.mode});renderFinal();});
   const saveRank=el.querySelector('[data-save-rank]'); if(saveRank)saveRank.onclick=()=>{saveFinal(j,{mode:'rank',order});renderFinal();};
@@ -467,7 +466,7 @@ function renderFinalResults(){
   const fr=fin.map(id=>({s:byId[id],...pts[id]})).sort((a,b)=>b.borda-a.borda);
   return `<div class="brief" style="max-width:none"><h2>Final round.</h2><p>${complete.length} of ${Object.keys(JUDGES).length} reviews complete · ${ranks.length} ranking${ranks.length===1?'':'s'} · ${tierBallots.length} tier review${tierBallots.length===1?'':'s'}.</p>
   <p>Ranking points use complete rankings only: first place earns ${fin.length} points, last place 1. Tier votes are shown separately and are not converted to ranking points. Incomplete reviews appear below but do not count toward totals.</p>
-  <div class="tblwrap"><table class="rtable"><thead><tr><th>Entry</th><th class="n">Ranking points</th><th class="n">1st-place votes</th><th>Tier votes</th><th>Per judge</th><th>Final-round notes</th></tr></thead><tbody>
+  <div class="tblwrap"><table class="rtable"><thead><tr><th>Entry</th><th class="n">Ranking points</th><th class="n">1st-place votes</th><th>Tier votes</th><th>Per judge</th><th>Feedback for submitters</th></tr></thead><tbody>
   ${fr.map(r=>`<tr><td><b>${esc(r.s.title||'Untitled')}</b><br><span style="color:var(--ink-3);font-size:13px">${esc(r.s.name)}</span></td><td class="n">${ranks.length?r.borda:'—'}</td><td class="n">${ranks.length?r.firsts:'—'}</td>
     <td>${Object.keys(TIERS).map(t=>`${t}: ${tierBallots.filter(k=>(k.tiers||{})[r.s.id]===t).length}`).join(' · ')}</td>
     <td>${Object.keys(JUDGES).map(j=>{const k=state.fin[j];if(!k)return `${esc(j)}: —`;const label=k.mode==='tiers'?Object.hasOwn(TIERS,(k.tiers||{})[r.s.id])?`${k.tiers[r.s.id]} tier`:'Unassigned':(k.order||[]).includes(r.s.id)?`#${k.order.filter(id=>fin.includes(id)).indexOf(r.s.id)+1}`:'Unranked';return `${esc(j)}: ${label}${finalComplete(k,fin)?'':' (incomplete)'}`;}).join('<br>')}</td>

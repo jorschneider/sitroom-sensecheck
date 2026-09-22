@@ -208,6 +208,42 @@ test('mixed results count complete active ballots only and retain incomplete fee
   assert.doesNotMatch(result, /Jordan:/);
 });
 
+test('judges see only their own final feedback in both methods while organizers retain all final feedback', async () => {
+  for (const mode of ['rank', 'tiers']) {
+    const p = portal();
+    const roundOne = {
+      works: 'Other judge round-one strengths', improve: 'Other judge round-one improvements',
+      next: 'Other judge round-one next steps', note: 'Other judge private round-one note'
+    };
+    const ownFeedback = 'My existing feedback for the submitter';
+    const otherFeedback = 'Other judge final feedback for the submitter';
+    p.setRows([
+      { round: 'r1', judge: 'Florian', sub: 6, cat: 1, ...roundOne },
+      { round: 'final', judge: 'Kevin', mode, order: ids, tiers: { 6: 'S', 8: 'A', 35: 'B' }, fin_note: { 6: ownFeedback } },
+      { round: 'final', judge: 'Florian', mode: 'rank', order: ids, fin_note: { 6: otherFeedback } }
+    ]);
+    await p.app.pull();
+    p.app.renderFinal();
+    assert.ok(p.final.innerHTML.includes(ownFeedback));
+    for (const feedback of [...Object.values(roundOne), otherFeedback]) {
+      assert.equal(p.final.innerHTML.includes(feedback), false, `${mode} must hide ${feedback}`);
+    }
+    assert.doesNotMatch(p.final.innerHTML, /Round one notes from the board|Florian · Top-5 potential/);
+
+    const editedFeedback = 'My updated feedback for the submitter';
+    p.card(6).querySelector('[data-fn]').oninput({ target: { value: editedFeedback } });
+    p.runTimers();
+    await p.settle();
+    p.app.renderFinal();
+    assert.ok(p.final.innerHTML.includes(editedFeedback));
+    assert.equal(p.saves.at(-1).fin_note[6], editedFeedback);
+    const results = p.app.renderFinalResults();
+    assert.ok(results.includes(editedFeedback));
+    assert.ok(results.includes(otherFeedback));
+    assert.equal(p.app.state.r1.Florian__6.note, roundOne.note);
+  }
+});
+
 test('adding a finalist makes old ballots incomplete and the new tier unassigned', () => {
   const p = portal();
   p.app.state.fin.Kevin = { judge: 'Kevin', mode: 'tiers', tiers: { 6: 'S', 8: 'A', 35: 'B' } };
