@@ -95,6 +95,8 @@ main{padding:22px 0 90px}
 .links a{color:var(--teal);text-decoration:none;border-bottom:1.5px solid var(--teal-soft)}
 .links a:hover{border-bottom-color:var(--teal)}
 .links .dead{color:var(--ink-3);text-decoration:line-through}
+.rtable .links{gap:10px;font-size:13px;margin:6px 0 0}
+.final-report-link{display:inline-block;margin-top:12px;font-family:"Jost",sans-serif;font-weight:600;font-size:14px}
 details.read{margin-top:10px;border-top:1px dashed var(--rule);padding-top:8px}
 details.read summary{cursor:pointer;font-family:"Jost",sans-serif;font-size:13.5px;font-weight:500;color:var(--ink-3)}
 details.read p{font-size:14px;color:var(--ink-2);margin:8px 0 0}
@@ -200,6 +202,7 @@ body:not(.landing) #landing{display:none}
       <div class="cover-title">
         <h1><span>Evals for the</span>Situation<br>Room</h1>
         <div class="sub">A judging portal. Round 1: sort your assigned entries and write the entrants a few lines. Final round: the four of you look at the best together.</div>
+        <a class="final-report-link" href="../final/">View final results & project links ↗</a>
         <div class="signed" id="signed"></div>
       </div>
       <div class="cover-art" aria-hidden="true"><div class="radar"></div></div>
@@ -313,10 +316,10 @@ document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>{document.
 let filter='all';
 document.querySelectorAll('#filters .chip').forEach(b=>b.onclick=()=>{filter=b.dataset.f;document.querySelectorAll('#filters .chip').forEach(x=>x.setAttribute('aria-pressed',x===b));renderR1();});
 
-function linkRow(s){
+function linkRow(s,includeLinkedIn=true){
   const site=isUrl(s.site)?`<a href="${esc(s.site)}" target="_blank" rel="noopener">Microsite ↗${s.site_status==='broken'?' (broken)':''}</a>`:`<span class="dead">No microsite</span>`;
   const repo=isUrl(s.repo)&&s.repo!==s.site?`<a href="${esc(s.repo)}" target="_blank" rel="noopener">Repo ↗${s.repo_status==='broken'?' (404)':''}</a>`:(isUrl(s.repo)?'':`<span class="dead">No repo</span>`);
-  const li=isUrl(s.linkedin)?`<a href="${esc(s.linkedin)}" target="_blank" rel="noopener">LinkedIn ↗</a>`:'';
+  const li=includeLinkedIn&&isUrl(s.linkedin)?`<a href="${esc(s.linkedin)}" target="_blank" rel="noopener">LinkedIn ↗</a>`:'';
   return `<div class="links">${site}${repo}${li}</div>`;
 }
 function dossier(s,showJudge){
@@ -467,7 +470,7 @@ function renderFinalResults(){
   return `<div class="brief" style="max-width:none"><h2>Final round.</h2><p>${complete.length} of ${Object.keys(JUDGES).length} reviews complete · ${ranks.length} ranking${ranks.length===1?'':'s'} · ${tierBallots.length} tier review${tierBallots.length===1?'':'s'}.</p>
   <p>Ranking points use complete rankings only: first place earns ${fin.length} points, last place 1. Tier votes are shown separately and are not converted to ranking points. Incomplete reviews appear below but do not count toward totals.</p>
   <div class="tblwrap"><table class="rtable"><thead><tr><th>Entry</th><th class="n">Ranking points</th><th class="n">1st-place votes</th><th>Tier votes</th><th>Per judge</th><th>Feedback for submitters</th></tr></thead><tbody>
-  ${fr.map(r=>`<tr><td><b>${esc(r.s.title||'Untitled')}</b><br><span style="color:var(--ink-3);font-size:13px">${esc(r.s.name)}</span></td><td class="n">${ranks.length?r.borda:'—'}</td><td class="n">${ranks.length?r.firsts:'—'}</td>
+  ${fr.map(r=>`<tr><td><b>${esc(r.s.title||'Untitled')}</b><br><span style="color:var(--ink-3);font-size:13px">${esc(r.s.name)}</span>${linkRow(r.s,false)}</td><td class="n">${ranks.length?r.borda:'—'}</td><td class="n">${ranks.length?r.firsts:'—'}</td>
     <td>${Object.keys(TIERS).map(t=>`${t}: ${tierBallots.filter(k=>(k.tiers||{})[r.s.id]===t).length}`).join(' · ')}</td>
     <td>${Object.keys(JUDGES).map(j=>{const k=state.fin[j];if(!k)return `${esc(j)}: —`;const label=k.mode==='tiers'?Object.hasOwn(TIERS,(k.tiers||{})[r.s.id])?`${k.tiers[r.s.id]} tier`:'Unassigned':(k.order||[]).includes(r.s.id)?`#${k.order.filter(id=>fin.includes(id)).indexOf(r.s.id)+1}`:'Unranked';return `${esc(j)}: ${label}${finalComplete(k,fin)?'':' (incomplete)'}`;}).join('<br>')}</td>
     <td>${ballots.filter(k=>(k.notes||{})[r.s.id]).map(k=>`<div class="fbq"><b>${esc(k.judge)}:</b> ${esc(k.notes[r.s.id])}</div>`).join('')}</td></tr>`).join('')}
